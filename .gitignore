@@ -3,7 +3,7 @@
 /node_modules
 node_modules
 /.idea
-/.env
+.idea
 /.env.local
 /.env.local.php
 /.env.*.local
