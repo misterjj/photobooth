@@ -35,6 +35,11 @@ class Photo
      */
     private $create_at;
 
+    public function __construct()
+    {
+        $this->create_at = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -55,12 +60,5 @@ class Photo
     public function getCreateAt(): ?\DateTimeInterface
     {
         return $this->create_at;
-    }
-
-    public function setCreateAt(\DateTimeInterface $create_at): self
-    {
-        $this->create_at = $create_at;
-
-        return $this;
     }
 }
