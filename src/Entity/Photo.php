@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"read"}},
+ *     denormalizationContext={"groups"={"write"}}
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\PhotoRepository")
  */
 class Photo
@@ -15,16 +19,19 @@ class Photo
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="blob")
+     * @ORM\Column(type="text")
+     * @Groups({"read", "write"})
      */
     private $data;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read"})
      */
     private $create_at;
 

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Webcam from "react-webcam";
-import {RefObject} from "react";
+import PhotoManager from '../managers/PhotoManager'
 
 interface AppProps {
 }
@@ -48,5 +48,6 @@ export default class App extends React.PureComponent<AppProps, AppState> {
     capture = (): void => {
         let imageSrc = this.webcamRef.current.getScreenshot();
         console.log(imageSrc)
+        PhotoManager.post('coucou')
     }
 }
