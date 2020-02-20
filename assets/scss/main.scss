@@ -1,11 +1,81 @@
+$height: 768px;
+$width-camera: 1024px;
+$height-camera: 634px;
+$height-camera-button: 100px;
+$height-camera-button-font-size: 50px;
+$width-photo-taken: .75 * $width-camera;
+
 .app {
   .photo {
     background: red;
-    height: 634px;
+    height: $height-camera;
+    position: relative;
+
+    video {
+      position: relative;
+      z-index: 0;
+    }
+
+    .diaphragm {
+      height: $height-camera;
+      width: 100%;
+      position: absolute;
+      z-index: 10;
+      background: blue;
+      opacity: 1;
+      left: 0;
+      transition: all ease .3s;
+
+      &.close {
+        top: 0;
+      }
+
+      &.open {
+        top: -100%;
+      }
+    }
+
+    .photo-taken {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(-5deg);
+      z-index: 20;
+      width: $width-photo-taken;
+      border: white solid 20px;
+      border-bottom: 0;
+
+      img {
+        width: 100%;
+      }
+
+      .actions {
+        height: 120px;
+        text-align: center;
+        background: white;
+      }
+    }
   }
 
   .controller {
     background: black;
-    height: 134px;
+    height: $height - $height-camera;
+
+    .button-camera {
+      button {
+        height: $height-camera-button;
+        width: $height-camera-button;
+        margin-top: (($height - $height-camera) - $height-camera-button) / 2;
+        background: transparent;
+        border-radius: 50%;
+        border: 2px solid white;
+        color: white;
+        font-size: $height-camera-button-font-size;
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
   }
 }

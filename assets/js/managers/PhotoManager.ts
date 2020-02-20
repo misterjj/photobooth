@@ -1,24 +1,33 @@
-import { AxiosError, AxiosResponse } from 'axios'
+import { AxiosResponse } from 'axios'
 
 const axios = require('axios')
 
 export interface Photo {
-  id: number;
+  id?: number|null;
   data: string;
-  create_at: Date
+  create_at?: Date|null
 }
 
 export default class PhotoManager {
 
-  public static post (data: string) {
-    axios.post('/api/photos', {
+  public static async post (data: string) {
+    return await axios.post('/api/photos', {
       data
     })
       .then((response: AxiosResponse) => {
-
+        return response.data
       })
-      .catch((error: AxiosError) => {
-        console.log(error)
+  }
+
+  public static async list (page: number = 1) {
+
+    return await axios.get('/api/photos?page=' + page, {
+      headers: {
+        accept: 'application/json'
+      }
+    })
+      .then((response: AxiosResponse) => {
+        return (response.data as Photo[])
       })
   }
 
