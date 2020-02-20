@@ -3,7 +3,9 @@ import Webcam from 'react-webcam'
 import PhotoManager, { Photo } from '../managers/PhotoManager'
 import { AxiosError } from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Overlay, OverlayTrigger, Popover } from 'react-bootstrap'
+import { OverlayTrigger, Popover } from 'react-bootstrap'
+import Slider from 'rc-slider'
+import 'rc-slider/assets/index.css'
 
 interface AppProps {
 }
@@ -21,6 +23,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
   private readonly videoWidth: number
   private readonly webcamRef: any
   private readonly clockTarget: any
+  private readonly defaultTimeout: number
 
   constructor (props: AppProps) {
     super(props)
@@ -28,6 +31,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
     this.clockTarget = React.createRef()
     this.videoHeight = 634
     this.videoWidth = 1024
+    this.defaultTimeout = 3
     this.videoConstraints = {
       width: this.videoWidth,
       height: this.videoHeight,
@@ -36,7 +40,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
 
     this.state = {
       diaphragmOpen: false,
-      timeout: 1,
+      timeout: this.defaultTimeout,
       timer: 0,
       photo: null
     }
@@ -50,15 +54,33 @@ export default class App extends React.PureComponent<AppProps, AppState> {
   }
 
   render () {
-    const popover = (
-      <Popover id="popover-basic">
-        <Popover.Title as="h3">Popover right</Popover.Title>
+    const marks = {
+      1: '1',
+      2: '2',
+      3: '3',
+      4: '4',
+      5: '5',
+      6: '6',
+      7: '7',
+      8: '8',
+      9: '9',
+      10: '10',
+    };
+    const popoverTimeout = (
+      <Popover id="popover-timeout" className="popover-timeout">
+        <Popover.Title as="h3">Retardateur</Popover.Title>
         <Popover.Content>
-          And here's some <strong>amazing</strong> content. It's very engaging.
-          right?
+          <Slider
+            min={1}
+            max={10}
+            defaultValue={this.defaultTimeout}
+            dots={true}
+            marks={marks}
+            onAfterChange={this.setTimeoutValue}
+          />
         </Popover.Content>
       </Popover>
-    );
+    )
 
     return <div className="app d-flex flex-column">
       <div className="photo">
@@ -68,7 +90,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
           height={this.videoHeight}
           ref={this.webcamRef}
           screenshotFormat="image/jpeg"
-          screenshotQuality={1}
+          screenshotQuality={0.8}
           videoConstraints={this.videoConstraints}/>
         <div className={'diaphragm ' + (this.state.diaphragmOpen ? 'open' : 'close')}></div>
         {null !== this.state.photo && (<div className="photo-taken d-flex flex-column">
@@ -80,7 +102,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                     className="btn btn-lg btn-danger"
                     onClick={this.reInit}>
                     <span className="d-flex align-items-center">
-                      <FontAwesomeIcon icon="trash-alt" size="2x" />
+                      <FontAwesomeIcon icon="trash-alt" size="2x"/>
                       <span>Oh non ! <br/>c'est trop moche !</span>
                     </span>
                   </button>
@@ -90,14 +112,14 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                     className="btn btn-lg btn-success"
                     onClick={this.savePhoto}>
                     <span className="d-flex align-items-center">
-                      { this.state.photo.saving
+                      {this.state.photo.saving
                         ? ([
-                          <FontAwesomeIcon icon="spinner" size="2x" spin />,
+                          <FontAwesomeIcon icon="spinner" size="2x" spin/>,
                           <span>en cours</span>
-                        ]):([
-                          <FontAwesomeIcon icon="check-circle" size="2x" />,
+                        ]) : ([
+                          <FontAwesomeIcon icon="check-circle" size="2x"/>,
                           <span>Enregister</span>
-                        ]) }
+                        ])}
                     </span>
                   </button>
                 </div>
@@ -107,7 +129,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                     className="btn btn-lg btn-info"
                     onClick={this.reInit}>
                     <span className="d-flex align-items-center">
-                      <FontAwesomeIcon icon="camera-retro" size="2x" />
+                      <FontAwesomeIcon icon="camera-retro" size="2x"/>
                       <span>Prendre une autre photo</span>
                     </span>
                   </button>
@@ -132,16 +154,16 @@ export default class App extends React.PureComponent<AppProps, AppState> {
           <button onClick={() => {this.takePhoto(this.state.timeout)}}>
             {
               this.state.timer === 0 ? (
-                <span><FontAwesomeIcon icon="camera-retro" /></span>
+                <span><FontAwesomeIcon icon="camera-retro"/></span>
               ) : (
                 this.state.timer
               )
             }
           </button>
           <div className="button-timeout">
-            <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+            <OverlayTrigger trigger="click" placement="top" overlay={popoverTimeout}>
               <button ref={this.clockTarget}>
-                <FontAwesomeIcon icon="clock" />
+                <FontAwesomeIcon icon="clock"/>
               </button>
             </OverlayTrigger>
           </div>
@@ -187,7 +209,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
       return
     } else {
       if (this.state.photo.saving) {
-        return;
+        return
       }
       this.setState({
         photo: { ...this.state.photo, saving: false }
@@ -210,6 +232,12 @@ export default class App extends React.PureComponent<AppProps, AppState> {
     this.setState({
       diaphragmOpen: true,
       photo: null
+    })
+  }
+
+  setTimeoutValue = (value: number) => {
+    this.setState({
+      timeout: value
     })
   }
 }
