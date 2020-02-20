@@ -12,7 +12,14 @@ let config = {
     extensions: ['.js', '.ts', '.tsx']
   },
   devServer: {
-    noInfo: true
+    noInfo: true,
+    historyApiFallback: true,
+    watchOptions: { aggregateTimeout: 300, poll: 1000 },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    }
   },
   module: {
     rules: [
@@ -35,6 +42,10 @@ let config = {
         loader: 'ts-loader',
       },
       {
+        test: /\.(png|svg|jpg|gif)$/,
+        loader: 'file-loader',
+      },
+      {
         test: /\.s?[ac]ss$/i,
         use: [
           // Creates `style` nodes from JS strings
@@ -46,6 +57,9 @@ let config = {
         ],
       }
     ]
+  },
+  node: {
+    fs: 'empty'
   },
   plugins: [
     new webpack.DefinePlugin({

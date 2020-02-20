@@ -6,6 +6,10 @@ $height-camera-button-font-size: 50px;
 $width-photo-taken: .75 * $width-camera;
 
 .app {
+  width: $width-camera;
+  height: $height;
+  overflow: hidden;
+
   .photo {
     background: red;
     height: $height-camera;
@@ -14,6 +18,14 @@ $width-photo-taken: .75 * $width-camera;
     video {
       position: relative;
       z-index: 0;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: $height-camera;
+      width: $width-camera;
     }
 
     .diaphragm {
@@ -36,6 +48,8 @@ $width-photo-taken: .75 * $width-camera;
     }
 
     .photo-taken {
+      animation-duration: 1s;
+      animation-name: photoEnter;
       position: absolute;
       left: 50%;
       top: 50%;
@@ -78,6 +92,7 @@ $width-photo-taken: .75 * $width-camera;
 
     .button-camera {
       position: relative;
+
       button {
         height: $height-camera-button;
         width: $height-camera-button;
@@ -111,4 +126,15 @@ $width-photo-taken: .75 * $width-camera;
 
 .popover-timeout {
   min-width: 500px;
+}
+
+@keyframes photoEnter {
+  from {
+    transform: translateZ(100px);
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }

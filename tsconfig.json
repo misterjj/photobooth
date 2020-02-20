@@ -9,7 +9,16 @@
     "sourceMap": true,
     "strict": true,
     "allowJs": true,
-    "jsx": "react"
+    "jsx": "react",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./assets/@types"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "*" : ["assets/types/*"]
+    },
+    "allowSyntheticDefaultImports": true
   },
   "exclude": ["node_modules"]
 }
