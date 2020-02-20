@@ -3,9 +3,11 @@ import { AxiosResponse } from 'axios'
 const axios = require('axios')
 
 export interface Photo {
-  id?: number|null;
+  id?: number;
   data: string;
-  create_at?: Date|null
+  create_at?: Date
+  saved: boolean
+  saving: boolean
 }
 
 export default class PhotoManager {

@@ -44,6 +44,7 @@ $width-photo-taken: .75 * $width-camera;
       width: $width-photo-taken;
       border: white solid 20px;
       border-bottom: 0;
+      background: white;
 
       img {
         width: 100%;
@@ -52,7 +53,21 @@ $width-photo-taken: .75 * $width-camera;
       .actions {
         height: 120px;
         text-align: center;
-        background: white;
+
+        button {
+          min-height: 80px;
+          min-width: 230px;
+          text-align: center;
+          line-height: 1em;
+
+          span {
+            flex-grow: 1;
+          }
+
+          svg {
+            margin-right: 10px;
+          }
+        }
       }
     }
   }
@@ -62,6 +77,7 @@ $width-photo-taken: .75 * $width-camera;
     height: $height - $height-camera;
 
     .button-camera {
+      position: relative;
       button {
         height: $height-camera-button;
         width: $height-camera-button;
@@ -74,6 +90,19 @@ $width-photo-taken: .75 * $width-camera;
 
         &:focus {
           outline: none;
+        }
+      }
+
+      .button-timeout {
+        position: absolute;
+        left: 100%;
+        bottom: 10px;
+
+        button {
+          height: $height-camera-button / 2;
+          width: $height-camera-button / 2;
+          font-size: $height-camera-button-font-size / 2;
+          border: none;
         }
       }
     }
