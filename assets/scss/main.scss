@@ -33,18 +33,50 @@ $width-photo-taken: .75 * $width-camera;
       width: 100%;
       position: absolute;
       z-index: 10;
-      background: blue;
       opacity: 1;
       left: 0;
+      top: 0;
       transition: all ease .3s;
+      overflow: hidden;
 
-      &.close {
-        top: 0;
+      .shutters {
+        width: 0;
+        height: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+
+        .shutter-container {
+          position: absolute;
+          top: -150px;
+          left: 0;
+          width: 605px;
+          height: 300px;
+          transform-origin:  0 150px;
+
+          .shutter {
+            width: 100%;
+            height: 100%;
+            background: url('../images/shutter.png');
+            transform-origin: bottom right;
+            transition: all ease-in-out .5s;
+          }
+        }
       }
 
       &.open {
-        top: -100%;
+        .shutter {
+          transform: rotate(90deg)
+        }
       }
+
+      //&.close {
+      //  top: 0;
+      //}
+      //
+      //&.open {
+      //  top: -100%;
+      //}
     }
 
     .photo-taken {

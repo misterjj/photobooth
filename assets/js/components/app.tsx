@@ -30,6 +30,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
     private readonly defaultTimeout: number
     private readonly minTimeout: number
     private readonly maxTimeout: number
+    private readonly shuttersNumber: number
 
     constructor(props: AppProps) {
         super(props)
@@ -41,6 +42,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
         this.defaultTimeout = 3
         this.minTimeout = 1
         this.maxTimeout = 10
+        this.shuttersNumber = 13
         this.videoConstraints = {
             width: this.videoWidth,
             height: this.videoHeight,
@@ -92,6 +94,15 @@ export default class App extends React.PureComponent<AppProps, AppState> {
             </Popover>
         )
 
+        const shutters = [];
+        const rotate = 360/ this.shuttersNumber
+        for (let i=0; i<this.shuttersNumber; i++) {
+            let style = {transform: 'rotate(' + rotate * i + 'deg)'};
+            shutters.push(<div className="shutter-container" style={style} key={'shutter-' + i}>
+                <div className="shutter"></div>
+            </div>)
+        }
+
         return <div className="app d-flex flex-column">
             <div className="photo">
                 <Webcam
@@ -105,7 +116,9 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                 {null !== this.state.overlay && (<div className="overlay">
                     <img ref={this.overlayImgRef} src={'http://localhost:8080' + overlays[this.state.overlay - 1]} alt=""/>
                 </div>)}
-                <div className={'diaphragm ' + (this.state.diaphragmOpen ? 'open' : 'close')}></div>
+                <div className={'diaphragm ' + (this.state.diaphragmOpen ? 'open' : 'close')}>
+                    <div className="shutters">{shutters}</div>
+                </div>
                 {null !== this.state.photo && (<div className="photo-taken d-flex flex-column">
                         <img src={this.state.photo.data} alt=""/>
                         <div className="actions d-flex align-items-center">

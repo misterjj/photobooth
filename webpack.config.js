@@ -12,6 +12,7 @@ let config = {
     extensions: ['.js', '.ts', '.tsx']
   },
   devServer: {
+    port: 8080,
     noInfo: true,
     historyApiFallback: true,
     watchOptions: { aggregateTimeout: 300, poll: 1000 },
@@ -44,6 +45,9 @@ let config = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         loader: 'file-loader',
+        options: {
+          publicPath: 'http://localhost:8080/dist',
+        }
       },
       {
         test: /\.s?[ac]ss$/i,
