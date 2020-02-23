@@ -8,6 +8,7 @@ import mergeImages from 'merge-images';
 import overlays from "../assets/overlay";
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
+import {IconProp} from "@fortawesome/fontawesome-svg-core";
 
 interface AppProps {
 }
@@ -114,7 +115,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                     screenshotQuality={0.8}
                     videoConstraints={this.videoConstraints}/>
                 {null !== this.state.overlay && (<div className="overlay">
-                    <img ref={this.overlayImgRef} src={'http://localhost:8080' + overlays[this.state.overlay - 1]} alt=""/>
+                    <img ref={this.overlayImgRef} src={overlays[this.state.overlay - 1]} alt=""/>
                 </div>)}
                 <div className={'diaphragm ' + (this.state.diaphragmOpen ? 'open' : 'close')}>
                     <div className="shutters">{shutters}</div>
@@ -124,58 +125,42 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                         <div className="actions d-flex align-items-center">
                             {!this.state.photo.saved ? ([
                                 <div className='flex-grow-1'>
-                                    <button
-                                        className="btn btn-lg btn-danger"
-                                        onClick={this.reInit}>
-                    <span className="d-flex align-items-center">
-                      <FontAwesomeIcon icon="trash-alt" size="2x"/>
-                      <span>Oh non ! <br/>c'est trop moche !</span>
-                    </span>
-                                    </button>
+                                    {this.controllerAction(<span>Oh non ! <br/>c'est trop moche !</span>, 'danger',
+                                        <FontAwesomeIcon icon='trash-alt' size="2x"/>, this.reInit)}
                                 </div>,
                                 <div className='flex-grow-1'>
-                                    <button
-                                        className="btn btn-lg btn-success"
-                                        onClick={this.savePhoto}>
-                    <span className="d-flex align-items-center">
-                      {this.state.photo.saving
-                          ? ([
-                              <FontAwesomeIcon icon="spinner" size="2x" spin/>,
-                              <span>en cours</span>
-                          ]) : ([
-                              <FontAwesomeIcon icon="check-circle" size="2x"/>,
-                              <span>Enregister</span>
-                          ])}
-                    </span>
-                                    </button>
+                                    {this.controllerAction(
+                                          this.state.photo.saving
+                                              ? (
+                                                  <span>en cours</span>
+                                              ) : (
+                                                  <span>Enregister</span>
+                                              ),
+                                        'success',
+                                        this.state.photo.saving
+                                            ? (
+                                                <FontAwesomeIcon icon="spinner" size="2x" spin/>
+                                            ) : (
+                                                <FontAwesomeIcon icon="check-circle" size="2x"/>
+                                            ),
+                                        this.savePhoto)
+                                    }
                                 </div>
                             ]) : ([
                                 <div className='flex-grow-1'>
-                                    <button
-                                        className="btn btn-lg btn-info"
-                                        onClick={this.reInit}>
-                    <span className="d-flex align-items-center">
-                      <FontAwesomeIcon icon="camera-retro" size="2x"/>
-                      <span>Prendre une autre photo</span>
-                    </span>
-                                    </button>
+                                    {this.controllerAction(<span>Prendre une autre photo</span>, 'info',
+                                        <FontAwesomeIcon icon='camera-retro' size="2x"/>, this.reInit)}
                                 </div>,
                                 <div className='flex-grow-1'>
-                                    <button
-                                        className="btn btn-lg btn-primary"
-                                        onClick={this.savePhoto}>
-                    <span className="d-flex align-items-center">
-                      <FontAwesomeIcon icon="envelope" size="2x"/>
-                      <span>Envoyer par email</span>
-                    </span>
-                                    </button>
+                                    {this.controllerAction(<span>Envoyer par email</span>, 'primary',
+                                        <FontAwesomeIcon icon='envelope' size="2x"/>, this.savePhoto)}
                                 </div>
                             ])}
                         </div>
                     </div>
                 )}
             </div>
-            < div className='controller flex-grow-1 d-flex justify-content-center'>
+            <div className='controller flex-grow-1 d-flex justify-content-center'>
                 <div className='button-camera'>
                     <button onClick={() => {
                         this.takePhoto(this.state.timeout)
@@ -241,7 +226,7 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                 return
             }
             this.setState({
-                photo: {...this.state.photo, saving: false}
+                photo: {...this.state.photo, saving: true}
             })
             PhotoManager
                 .post(this.state.photo.data)
@@ -306,5 +291,16 @@ export default class App extends React.PureComponent<AppProps, AppState> {
                     photo : {...this.state.photo, data: b64}
                 })
             })
+    }
+
+    controllerAction = (text: JSX.Element, btnClass: string, icon: JSX.Element, callback: () => void) => {
+        return <button
+            className={"btn btn-lg btn-" + btnClass}
+            onClick={callback}>
+                    <span className="d-flex align-items-center">
+                        {icon}
+                        {text}
+                    </span>
+        </button>
     }
 }
