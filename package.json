@@ -17,7 +17,7 @@
     "@fortawesome/react-fontawesome": "^0.1.8",
     "@types/node": "^13.7.4",
     "@types/rc-slider": "^8.6.5",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "eslint": "^6.8.0",
     "file-system": "^2.2.2",
